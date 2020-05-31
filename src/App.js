@@ -8,7 +8,8 @@ class App extends Component {
     super(props)
 
     this.state = {
-      data: '',
+      isLoading: false,
+
       mobileNo: '',
       amount: ''
     }
@@ -29,18 +30,47 @@ class App extends Component {
 
   submitData = () => {
 
-    this.setState({
-      customerId: this.customerId.value
-    })
+    this.setState({ isLoading: true })
 
-    window.postMessage(this.state.amount, '*')
+    // window.postMessage(this.state.amount, '*')
+
+
+    let url = 'https://testsys.prabhupay.com/api/BillPayment/MobileTopUp'
+    let params = {
+      "customerId": this.customerId.value,
+      "topUpNumber": this.state.mobileNo,
+      "operatorId": 1,
+      "amount": this.state.amount,
+      "planId": "",
+      "planName": "",
+      "planDesc": "",
+      "planValidity": "",
+      "requestFromFlag": 0
+    }
+
+    fetch(url, {
+      method: "POST",
+      cache: 'no-cache',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + this.token.value
+      },
+      body: JSON.stringify(params)
+    }).then(res => res.json())
+      .then(result => {
+        this.setState({ isLoading: false, response: 'Success' })
+      }, error => {
+        this.setState({isLoading: false, response: error.message })
+      })
+
   }
 
   render() {
     return (
       <div className='App' ref={ref => this.rv = ref}>
         <form className='form'>
-          <input ref={ref => this.customerId = ref} id='customerId' type='hidden' />
+          <input ref={ref => this.token = ref} id='token' /*type='hidden'*/ />
+          <input ref={ref => this.customerId = ref} id='customerId' /*type='hidden'*/ />
 
           <TextField style={styles.input}
             label='Mobile Number'
@@ -63,9 +93,14 @@ class App extends Component {
           </Button>
 
         </form>
-        {this.state.customerId}
+
+        {
+          this.state.isLoading
+            ? 'Loading'
+            : this.state.response
+        }
+
         <br />
-        {this.state.data.data}
       </div>
     );
   }
