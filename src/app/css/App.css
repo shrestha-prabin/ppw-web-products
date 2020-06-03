@@ -1,3 +1,7 @@
+.App {
+  min-height: 100vh;
+}
+
 .container {
   display: flex;
   flex: 1;
@@ -11,4 +15,14 @@
   flex: 1;
   flex-direction: column;
   max-width: 540px;
+  padding-top: 24px;
+}
+
+.details-page {
+  width: 90%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: 540px;
+  padding-top: 24px;
 }

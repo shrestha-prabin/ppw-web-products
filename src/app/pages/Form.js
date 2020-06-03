@@ -14,7 +14,7 @@ export class Form extends Component {
     }
 
     componentDidUpdate(oldProps) {
-        if (oldProps.match.params.opCode != this.props.match.params.opCode) {
+        if (oldProps.match.params.opCode !== this.props.match.params.opCode) {
             this.setState({
                 opCode: this.props.match.params.opCode
             })

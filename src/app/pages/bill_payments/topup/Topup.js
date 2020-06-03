@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { TextField, Button } from '@material-ui/core';
-import {formStyles} from '../../../configs/Styles'
+import { formStyles } from '../../../configs/Styles'
 
 export class Topup extends Component {
 
@@ -26,23 +26,47 @@ export class Topup extends Component {
 
         this.setState({ isLoading: true })
 
-        let url = 'MobileTopup'
-        let params = {
-            "UserName": "",
-            "Password": "",
-            "OperatorCode": 1,
-            "MobileNumber": this.state.mobileNo,
-            "Amount": this.state.amount,
-            "ExtraField1": ""
-        }
-
         if (window.webkit) {
-            window.webkit.messageHandlers.submitListener.postMessage({
+
+            let url = 'MobileTopup'
+            let params = {
+                "UserName": "",
+                "Password": "",
+                "OperatorCode": 1,
+                "MobileNumber": this.state.mobileNo,
+                "Amount": this.state.amount,
+                "ExtraField1": ""
+            }
+
+            let postMessage = {
                 'url': url,
                 'params': params,
                 'showDetailsPage': false,
                 'OperatorName': 'NTC Prepaid'
-            });
+            }
+            window.webkit.messageHandlers.submitListener.postMessage(postMessage);
+        } else if (window.android) {
+
+            let url = 'MobileTopUp'
+
+            let params = {
+                "operatorId": 1,
+                "amount": this.state.amount,
+                "customerId": "",
+                "topUpNumber": this.state.mobileNo,
+                "planId": "",
+                "planName": "",
+                "planDesc": "",
+                "planValidity": "",
+            }
+
+            let postMessage = {
+                'url': url,
+                'params': params,
+                'showDetailsPage': false,
+                'OperatorName': 'NTC Prepaid'
+            }
+            window.android.submitForm(JSON.stringify(postMessage))
         }
     }
 

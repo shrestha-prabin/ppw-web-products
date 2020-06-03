@@ -47,6 +47,7 @@ export class Nwsc extends Component {
                 'showDetailsPage': true
             });
         }
+
     }
 
     showDetailsPage() {

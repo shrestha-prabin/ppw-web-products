@@ -25,8 +25,10 @@ export class DetailsPage extends Component {
 
     render() {
         return (
-            <div>
-                {this.renderDetailsPage()}
+            <div className='container'>
+                <div className='details-page'>
+                    {this.renderDetailsPage()}
+                </div>
             </div>
         )
     }

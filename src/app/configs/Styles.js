@@ -2,6 +2,7 @@ import Colors from './Colors'
 
 const formStyles = {
     input: {
+        width: '100%',
         marginTop: 16,
     },
     button: {
