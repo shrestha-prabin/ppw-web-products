@@ -5,19 +5,19 @@ export class DetailsPage extends Component {
 
     constructor(props) {
         super(props)
-    
+
         this.state = {
-             opCode: props.match.params.opCode
+            opCode: props.match.params.opCode
         }
-        
+
     }
 
     renderDetailsPage() {
         switch (this.state.opCode) {
-            
+
             case "2":
                 return <NwscDetails />
-                
+
             default:
                 break;
         }
@@ -25,10 +25,8 @@ export class DetailsPage extends Component {
 
     render() {
         return (
-            <div className='container'>
-                <div className='details-page'>
-                    {this.renderDetailsPage()}
-                </div>
+            <div className='details-page'>
+                {this.renderDetailsPage()}
             </div>
         )
     }

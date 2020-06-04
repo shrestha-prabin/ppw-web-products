@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Button, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
+import { TextField, Button, InputLabel, Select, MenuItem, FormControl, Container } from '@material-ui/core';
 import { formStyles } from '../../../configs/Styles'
 
 export class Nwsc extends Component {
@@ -65,7 +65,7 @@ export class Nwsc extends Component {
         }
 
         return (
-            <div className='container'>
+            <Container maxWidth='sm'>
                 <form className='form'>
 
                     <TextField style={formStyles.input}
@@ -76,12 +76,12 @@ export class Nwsc extends Component {
                     />
 
 
-                    <FormControl  style={formStyles.input}>
+                    <FormControl style={formStyles.input}>
 
                         <InputLabel>Counter</InputLabel>
                         <Select
                             name='selected_office'
-                            label='Counter'
+                            // label='Counter'
                             value={this.state.selected_office}
                             onChange={this.handleValueChange}
                         >
@@ -97,10 +97,11 @@ export class Nwsc extends Component {
                         variant='contained'
                         onClick={this.submitData}>
                         Proceed
-                </Button>
+                    </Button>
 
                 </form>
-            </div>
+            </Container>
+
         )
     }
 }

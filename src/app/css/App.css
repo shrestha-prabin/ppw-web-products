@@ -1,5 +1,5 @@
 .App {
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 .container {
@@ -9,20 +9,24 @@
   align-items: center;
 }
 
+.form-page {
+  /* min-height: 100vh; */
+}
+
 .form {
-  width: 90%;
+  padding-top: 8px;
+  padding-bottom: 32px;
   display: flex;
   flex: 1;
   flex-direction: column;
-  max-width: 540px;
-  padding-top: 24px;
 }
 
 .details-page {
-  width: 90%;
+  min-height: 100vh;
   display: flex;
   flex: 1;
   flex-direction: column;
-  max-width: 540px;
-  padding-top: 24px;
+  background-color: #f9f9f9;
+  padding-top: 8px;
+  padding-bottom: 32px;
 }

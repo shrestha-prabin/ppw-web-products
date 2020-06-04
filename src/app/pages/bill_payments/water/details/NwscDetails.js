@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Card, CardContent, TextField, Button } from '@material-ui/core';
+import { Card, CardContent, TextField, Button, Container, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Grid } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { formStyles } from '../../../../configs/Styles';
+import Colors from '../../../../configs/Colors';
 
 export class NwscDetails extends Component {
 
@@ -9,7 +11,8 @@ export class NwscDetails extends Component {
 
         this.state = {
             detailsData: {},
-            amount: ''
+            amount: '',
+            billDetailsVisible: false
         }
     }
 
@@ -45,10 +48,73 @@ export class NwscDetails extends Component {
             return <div>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
                     <div style={{ fontWeight: 'bold', fontSize: 14 }}>{item.name}</div>
-                    <div style={{ fontSize: 14}}>{item.value}</div>
+                    <div style={{ fontSize: 14 }}>{item.value}</div>
                 </div>
             </div>
         })
+    }
+
+    renderBillDetails() {
+        let { detailsData } = this.state
+        let billDetails = [
+            {
+                'BillFrom': "Jan",
+                'BillTo': "Feb",
+                'BillAmount': 100,
+                'FineAmount': 20,
+                'MeterRent': 50,
+                'DiscountAmount': 5,
+                'PayableAmount': 90,
+            },
+            {
+                'BillFrom': "Jan",
+                'BillTo': "Feb",
+                'BillAmount': 100,
+                'FineAmount': 20,
+                'MeterRent': 50,
+                'DiscountAmount': 5,
+                'PayableAmount': 90,
+            },
+            {
+                'BillFrom': "Jan",
+                'BillTo': "Feb",
+                'BillAmount': 100,
+                'FineAmount': 20,
+                'MeterRent': 50,
+                'DiscountAmount': 5,
+                'PayableAmount': 90,
+            },
+        ]
+
+        return billDetails.map((item, i) => {
+            return <ExpansionPanel>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-content" id="panel-header">
+                    {item.BillFrom}
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails style={{ backgroundColor: Colors.background, flexDirection: 'column' }}>
+                    {
+                        [
+                            { 'name': 'Bill Amount', 'value': item.BillAmount },
+                            { 'name': 'Fine Amount', 'value': item.FineAmount },
+                            { 'name': 'Meter Rent', 'value': item.MeterRent },
+                            { 'name': 'Discount Amount', 'value': item.DiscountAmount },
+                            { 'name': 'Payable Amount', 'value': item.PayableAmount },
+                        ].map(item2 => {
+                            return <Grid container justify='space-between'>
+                                <div item style={{ fontSize: 14, fontWeight: 'bold', marginTop: 4 }}>{item2.name}</div>
+                                <div style={{ fontSize: 14 }}>{item2.value}</div>
+                            </Grid>
+                        })
+                    }
+
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+        })
+
+    }
+
+    toggleBillDetailsVisiblity = () => {
+        this.setState({ billDetailsVisible: !this.state.billDetailsVisible })
     }
 
     handleSubmit = () => {
@@ -80,12 +146,15 @@ export class NwscDetails extends Component {
     }
 
     handleCancel() {
-
+        if (window.webkit) {
+            window.webkit.messageHandlers.cancelListener.postMessage('')
+        }
     }
 
     render() {
         return (
-            <div>
+            <Container maxWidth='sm'>
+
                 <input id='details-data-container' type='hidden' />
 
                 <Card>
@@ -97,9 +166,18 @@ export class NwscDetails extends Component {
                 <br />
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button size='small' color='secondary'>Show Bill Details</Button>
+                    <Button size='small' style={{ fontSize: 11, fontWeight: 'bold', color: Colors.primary }} onClick={this.toggleBillDetailsVisiblity}>
+                        {this.state.billDetailsVisible ? 'Hide Bill Details' : 'Show Bill Details'}
+                    </Button>
                 </div>
 
+                {
+                    this.state.billDetailsVisible
+                        ? <div style={{ marginTop: 8 }}>
+                            {this.renderBillDetails()}
+                        </div>
+                        : null
+                }
                 <br />
 
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -114,15 +192,14 @@ export class NwscDetails extends Component {
 
                     <Button style={formStyles.button} variant='contained' onClick={this.handleSubmit}>
                         Pay Now
-                    </Button>
+                        </Button>
 
                     <Button style={{ marginTop: 16 }} onClick={this.handleCancel}>
                         Cancel
                     </Button>
 
                 </div>
-
-            </div>
+            </Container>
         )
     }
 }
