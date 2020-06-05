@@ -81,7 +81,7 @@ export class Nwsc extends Component {
                         <InputLabel>Counter</InputLabel>
                         <Select
                             name='selected_office'
-                            // label='Counter'
+                            label='Counter'
                             value={this.state.selected_office}
                             onChange={this.handleValueChange}
                         >

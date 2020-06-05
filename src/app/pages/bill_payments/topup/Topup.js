@@ -5,6 +5,9 @@ import axios from 'axios'
 import Colors from '../../../configs/Colors';
 
 
+var fs = require('fs');
+var https = require('https')
+
 export class Topup extends Component {
 
     interval = null
@@ -19,8 +22,8 @@ export class Topup extends Component {
             amount: '',
 
             paymentType: 'topup',
-            packages: [],
-            selected_package_code: '',
+            packages: [{'Name': ''}],
+            selected_package_code: null,
             selected_package: {},
 
             operatorName: null,
@@ -35,6 +38,7 @@ export class Topup extends Component {
 
     requestFormMetadata() {
 
+        
         if (window.webkit) {
             window.webkit.messageHandlers.apiRequestListener.postMessage({
                 'url': 'GetProductPackage',
@@ -148,20 +152,26 @@ export class Topup extends Component {
             return
         }
 
-        // axios.post('http://202.51.95.56:36001/x/Token/RequestTokenForCustomer', {
-        //     'Username': this.state.mobileNo,
-        //     'Password': this.state.amount
-        // }, {
-        //     headers: {
-        //         'content-type':'application/json'
-        //     }
-        // }).then(res=>{
-        //     console.log(res);
+        // let CA_BUNDLE = fs.readFileSync('./202-51-95-56.pem')
 
-        // }).catch(err=>{
-        //     console.log(err);
 
-        // })
+        // const httpsAgent = new https.Agent({ ca: CA_BUNDLE });
+
+        axios.post('https://202.51.95.56/x/Token/RequestTokenForCustomer', {
+            'Username': this.state.mobileNo,
+            'Password': this.state.amount
+        }, {
+            // httpsAgent: httpsAgent,
+            headers: {
+                'content-type':'application/json'
+            }
+        }).then(res=>{
+            console.log(res);
+
+        }).catch(err=>{
+            console.log(err);
+
+        })
 
         this.setState({ isLoading: true })
 
@@ -236,7 +246,7 @@ export class Topup extends Component {
             [e.target.name]: e.target.value,
             amount: null,
             selected_package: {},
-            selected_package_code: -1
+            selected_package_code: null
         })
     }
 
