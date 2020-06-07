@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { TextField, Button, InputLabel, Select, MenuItem, FormControl, Container } from '@material-ui/core';
+import { TextField, InputLabel, Select, MenuItem, FormControl, Container } from '@material-ui/core';
 import { formStyles } from '../../../configs/Styles'
+import Button from '../../../components/Button'
+import FormInputView, { INPUT_TYPE } from '../../../components/FormInputView';
 
 export class Nwsc extends Component {
 
@@ -14,17 +16,51 @@ export class Nwsc extends Component {
             customer_id: '',
             selected_office: '',
             officeList: [
-                { OfficeCodes: "BNP", Office: "BANEPA" },
-                { OfficeCodes: "BIN", Office: "POKHARA, BINDIYABASINI" },
-                { OfficeCodes: "HEM", Office: "POKHARA, HEMJA" },
-                { OfficeCodes: "POK", Office: "POKHARA, PARDI" }
+                // { OfficeCodes: "BNP", Office: "BANEPA" },
+                // { OfficeCodes: "BIN", Office: "POKHARA, BINDIYABASINI" },
+                // { OfficeCodes: "HEM", Office: "POKHARA, HEMJA" },
+                // { OfficeCodes: "POK", Office: "POKHARA, PARDI" }
             ]
         }
     }
 
-    handleValueChange = (e) => {
+    componentDidMount() {
+        this.requestOfficeList()
+    }
+
+    requestOfficeList() {
+
+        if (window.webkit) {
+            window.webkit.messageHandlers.apiRequestListener.postMessage({
+                'url': 'GetNWSCOfficeCode',
+                'params': {}
+            });
+        }
+        var metadata = null
+        this.interval = setInterval(() => {
+            let input = document.getElementById('json-data-container').
+            metadata = input ? input.value: null
+            console.log(metadata);
+
+            if (metadata && metadata != '') {
+                try {
+                    let json = JSON.parse(metadata)
+                    clearInterval(this.interval)
+
+                    this.setState({
+                        officeList: json.OfficeCodes || []
+                    })
+
+                } catch (err) {
+                    console.log('Cannot parse JSON');
+                }
+            }
+        }, 500);
+
+    }
+    handleValueChange = (name, value) => {
         this.setState({
-            [e.target.name]: e.target.value
+            [name]: value
         })
     }
 
@@ -66,17 +102,27 @@ export class Nwsc extends Component {
 
         return (
             <Container maxWidth='sm'>
+
+                <input id='json-data-container' type='hidden' />
+
                 <form className='form'>
 
-                    <TextField style={formStyles.input}
+                    <FormInputView
                         label='Customer ID'
                         name='customer_id'
                         value={this.state.customer_id}
                         onChange={this.handleValueChange}
                     />
 
+                    <FormInputView
+                        name='selected_office'
+                        label='Counter'
+                        value={this.state.selected_office}
+                        inputType={INPUT_TYPE.dropdown}
+                        dropdownData={this.state.officeList.map(item => { return { 'name': item.Office, 'value': item.OfficeCodes } })}
+                        onChange={this.handleValueChange} />
 
-                    <FormControl style={formStyles.input}>
+                    {/* <FormControl style={formStyles.input}>
 
                         <InputLabel>Counter</InputLabel>
                         <Select
@@ -91,7 +137,7 @@ export class Nwsc extends Component {
                                 })
                             }
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
 
                     <Button style={formStyles.button}
                         variant='contained'

@@ -1,5 +1,6 @@
 .App {
   /* min-height: 100vh; */
+  user-select: none;
 }
 
 .container {
@@ -14,7 +15,7 @@
 }
 
 .form {
-  padding-top: 8px;
+  padding-top: 16px;
   padding-bottom: 32px;
   display: flex;
   flex: 1;
@@ -27,6 +28,6 @@
   flex: 1;
   flex-direction: column;
   background-color: #f9f9f9;
-  padding-top: 8px;
+  padding-top: 16px;
   padding-bottom: 32px;
 }

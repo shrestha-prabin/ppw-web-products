@@ -1,12 +1,21 @@
 import React, { Component } from 'react'
-import { TextField, Button, Container, RadioGroup, FormControlLabel, Radio, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { TextField, Container, RadioGroup, FormControlLabel, Radio, FormControl, InputLabel, Select, MenuItem, ThemeProvider, createMuiTheme } from '@material-ui/core';
 import { formStyles } from '../../../configs/Styles'
 import axios from 'axios'
 import Colors from '../../../configs/Colors';
 
+import CA_BUNDLE from './202-51-95-56.pem'
+import FormInputView, { INPUT_TYPE } from '../../../components/FormInputView';
+import Button from '../../../components/Button';
 
 var fs = require('fs');
 var https = require('https')
+
+const theme = createMuiTheme({
+    palette: {
+        primary: { 500: Colors.primary },
+    }
+})
 
 export class Topup extends Component {
 
@@ -22,7 +31,7 @@ export class Topup extends Component {
             amount: '',
 
             paymentType: 'topup',
-            packages: [{'Name': ''}],
+            packages: [],
             selected_package_code: null,
             selected_package: {},
 
@@ -38,7 +47,7 @@ export class Topup extends Component {
 
     requestFormMetadata() {
 
-        
+
         if (window.webkit) {
             window.webkit.messageHandlers.apiRequestListener.postMessage({
                 'url': 'GetProductPackage',
@@ -73,9 +82,7 @@ export class Topup extends Component {
         clearInterval(this.interval)
     }
 
-    handleValueChange = (e) => {
-        let name = e.target.name
-        let value = e.target.value
+    handleValueChange = (name, value) => {
         var { operatorCode, operatorName } = this.state
 
         if (name == 'mobileNo') {
@@ -131,9 +138,9 @@ export class Topup extends Component {
         })
     }
 
-    handlePackageSelection = (e) => {
+    handlePackageSelection = (name, value) => {
         let { selected_package, selected_package_code } = this.state
-        selected_package_code = e.target.value
+        selected_package_code = value
 
         for (const item of this.state.packages) {
             if (item.Code == selected_package_code) {
@@ -155,20 +162,24 @@ export class Topup extends Component {
         // let CA_BUNDLE = fs.readFileSync('./202-51-95-56.pem')
 
 
-        // const httpsAgent = new https.Agent({ ca: CA_BUNDLE });
+        const httpsAgent = new https.Agent({
+            rejectUnauthorized: false,
+
+            // ca: CA_BUNDLE 
+        });
 
         axios.post('https://202.51.95.56/x/Token/RequestTokenForCustomer', {
             'Username': this.state.mobileNo,
             'Password': this.state.amount
         }, {
-            // httpsAgent: httpsAgent,
+            httpsAgent: httpsAgent,
             headers: {
-                'content-type':'application/json'
+                'content-type': 'application/json'
             }
-        }).then(res=>{
+        }).then(res => {
             console.log(res);
 
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err);
 
         })
@@ -227,21 +238,22 @@ export class Topup extends Component {
 
     renderSelectedPackageInfo() {
         let { selected_package, amount } = this.state
-        return <div>
-            <p style={{fontSize: 14, color: '#777777'}}>{selected_package.Description}</p>
+        if (this.state.selected_package_code)
+            return <div>
+                <p style={{ fontSize: 14, color: '#777777' }}>{selected_package.Description}</p>
 
-            {
-                amount
-                    ? <div style={{ fontSize: 20, fontWeight: 'bold', color: Colors.primary }}>
-                        Rs.{amount}
-                    </div>
-                    : null
-            }
+                {
+                    amount
+                        ? <div style={{ fontSize: 20, fontWeight: 'bold', color: Colors.primary }}>
+                            Rs.{amount}
+                        </div>
+                        : null
+                }
 
-        </div>
+            </div>
     }
 
-    handlePaymentTypeToggle = (e) =>{
+    handlePaymentTypeToggle = (e) => {
         this.setState({
             [e.target.name]: e.target.value,
             amount: null,
@@ -253,13 +265,13 @@ export class Topup extends Component {
     render() {
         return (
             <Container maxWidth='sm'>
-                <input id='json-data-container'  type='hidden'/>
+                <input id='json-data-container' type='hidden' />
                 <form className='form'>
-
-                    <TextField style={formStyles.input}
+                    <FormInputView
                         label='Mobile Number'
                         name='mobileNo'
                         value={this.state.mobileNo}
+                        inputType={INPUT_TYPE.mobile_number}
                         onChange={this.handleValueChange}
                     />
 
@@ -268,24 +280,38 @@ export class Topup extends Component {
                     {
                         this.state.operatorName == 'Ncell' && this.state.packages.length > 0
                             ? <div style={formStyles.input}>
-                                <RadioGroup row name='paymentType' value={this.state.paymentType} onChange={this.handlePaymentTypeToggle}>
-                                    <FormControlLabel value='topup' control={<Radio />} label='Topup Amount' />
-                                    <FormControlLabel value="package" control={<Radio />} label='Select Package' />
-                                </RadioGroup>
+                                <ThemeProvider theme={theme}>
+                                    <RadioGroup row name='paymentType' value={this.state.paymentType} onChange={this.handlePaymentTypeToggle}>
+                                        <FormControlLabel value='topup' control={<Radio color='primary' />} label='Topup Amount' />
+                                        <FormControlLabel value="package" control={<Radio color='primary' />} label='Select Package' />
+                                    </RadioGroup>
+                                </ThemeProvider>
                             </div>
                             : null
                     }
                     {
                         this.state.paymentType == 'topup'
-                            ? <TextField style={formStyles.input}
+                            ? <FormInputView
                                 label='Amount'
                                 name='amount'
                                 value={this.state.amount}
+                                inputType={INPUT_TYPE.number}
                                 onChange={this.handleValueChange}
+                                maxLength={5}
                             />
                             : <div>
 
-                                <FormControl style={formStyles.input}>
+                                <FormInputView
+                                    name='selected_package_code'
+                                    label='Select a Package'
+                                    value={this.state.selected_package_code}
+                                    inputType={INPUT_TYPE.dropdown}
+                                    onChange={this.handlePackageSelection}
+                                    dropdownData={this.state.packages.map(item => { return { 'name': item.Name, 'value': item.Code } })}
+                                />
+
+
+                                {/* <FormControl style={formStyles.input}>
 
                                     <InputLabel>Select a Package</InputLabel>
                                     <Select
@@ -300,18 +326,18 @@ export class Topup extends Component {
                                             })
                                         }
                                     </Select>
-                                </FormControl>
-                                { this.renderSelectedPackageInfo() }
+                                </FormControl> */}
+                                {this.renderSelectedPackageInfo()}
                             </div>
                     }
 
-                    <Button style={formStyles.button}
+                    <Button style={{ marginTop: 32 }}
                         variant='contained'
                         onClick={this.submitData}>
                         {
                             this.state.paymentType == 'topup'
-                            ? 'Top up Now'
-                            : 'Purchase Package'
+                                ? 'Top up Now'
+                                : 'Purchase Package'
                         }
                     </Button>
                 </form>

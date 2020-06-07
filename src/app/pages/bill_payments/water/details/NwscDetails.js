@@ -3,6 +3,9 @@ import { Card, CardContent, TextField, Button, Container, ExpansionPanel, Expans
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { formStyles } from '../../../../configs/Styles';
 import Colors from '../../../../configs/Colors';
+import BlockButton from '../../../../components/Button'
+import FormInputView, { INPUT_TYPE } from '../../../../components/FormInputView';
+
 
 export class NwscDetails extends Component {
 
@@ -28,9 +31,9 @@ export class NwscDetails extends Component {
 
     }
 
-    handleValueChange = (e) => {
+    handleValueChange = (name, value) => {
         this.setState({
-            [e.target.name]: e.target.value
+            [name]: value
         })
     }
 
@@ -181,20 +184,23 @@ export class NwscDetails extends Component {
                 <br />
 
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <TextField style={formStyles.input}
+                    <FormInputView style={formStyles.input}
                         label='Amount'
                         name='amount'
                         value={this.state.amount}
+                        inputType={INPUT_TYPE.number}
+                        minValue={100}
+                        maxValue={10000}
                         onChange={this.handleValueChange}
                     />
 
                     <br />
 
-                    <Button style={formStyles.button} variant='contained' onClick={this.handleSubmit}>
+                    <BlockButton style={formStyles.button} onClick={this.handleSubmit}>
                         Pay Now
-                        </Button>
+                    </BlockButton>
 
-                    <Button style={{ marginTop: 16 }} onClick={this.handleCancel}>
+                    <Button style={{ marginTop: 16, height: 48 }} onClick={this.handleCancel}>
                         Cancel
                     </Button>
 

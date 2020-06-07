@@ -49,10 +49,11 @@ class App extends Component {
             <Routes />
           </Switch>
 
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <Link to='/1'>Topup</Link>
             <Link to='/2'>NWSC</Link>
             <Link to='/details/2'>NWSC Details</Link>
+            <Link to='/test'>Components</Link>
           </div>
         </Router>
       </div>

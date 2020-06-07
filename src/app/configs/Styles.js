@@ -6,9 +6,9 @@ const formStyles = {
         marginTop: 16,
     },
     button: {
-        marginTop: 24,
-        backgroundColor: Colors.primary,
-        color: '#fff'
+        marginTop: 32,
+        // backgroundColor: Colors.primary,
+        // color: '#fff'
     }
 }
 
