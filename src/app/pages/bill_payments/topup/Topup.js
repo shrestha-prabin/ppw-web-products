@@ -168,7 +168,7 @@ export class Topup extends Component {
             // ca: CA_BUNDLE 
         });
 
-        axios.post('https://202.51.95.56/x/Token/RequestTokenForCustomer', {
+        axios.post('https://testsys.prabhupay.com/api/Token/RequestTokenForCustomer', {
             'Username': this.state.mobileNo,
             'Password': this.state.amount
         }, {

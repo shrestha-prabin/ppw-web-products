@@ -1,4 +1,5 @@
 import Colors from './Colors'
+import { createMuiTheme } from '@material-ui/core'
 
 const formStyles = {
     input: {
@@ -13,4 +14,14 @@ const formStyles = {
 }
 
 
-export { formStyles }
+const theme = createMuiTheme({
+    palette: {
+        primary: { 500: Colors.primary },
+        secondary: { main: '#444444'},
+        error: { 500: Colors.primary }
+    }
+})
+
+
+
+export { formStyles, theme }

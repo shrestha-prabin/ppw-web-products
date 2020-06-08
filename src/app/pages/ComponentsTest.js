@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container } from '@material-ui/core'
 import FormInputView, { INPUT_TYPE } from '../components/FormInputView'
 import Button from '../components/Button'
+import DatePickerView from '../components/DatePickerView'
 
 export class ComponentsTest extends Component {
 
@@ -9,7 +10,7 @@ export class ComponentsTest extends Component {
         super(props)
 
         this.state = {
-
+            
         }
     }
 
@@ -18,6 +19,14 @@ export class ComponentsTest extends Component {
         this.setState({
             [name]: value
         })
+    }
+
+    handleDateChange = (date) => {
+        console.log(date);
+        this.setState({
+            value: date
+        })
+
     }
 
     submit = () => {
@@ -86,6 +95,11 @@ export class ComponentsTest extends Component {
                         inputType={INPUT_TYPE.dropdown}
                         dropdownData={[{'name': 'Male', 'value': '0'}, {'name': 'Female', 'value': '1'}]}
                         onChange={this.handleValueChange} />
+
+                    <DatePickerView
+                        label='Date Picker'
+                        name='date'
+                        onChange={this.handleDateChange} />
 
                     <Button style={{marginTop: 32}} onClick={this.submit}>
                         Submit

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { TextField, createMuiTheme, ThemeProvider, MenuItem, InputLabel, FormControl, Select } from '@material-ui/core';
-import { formStyles } from '../configs/Styles';
+import { formStyles, theme } from '../configs/Styles';
 import { isValidMobileNumber, isValidLandlineNumber, isValidEmail, isValidNumber } from '../utils/Validators';
 
 import Colors from '../configs/Colors'
@@ -16,14 +16,6 @@ const INPUT_TYPE = {
     'email': 5,
     'dropdown': 6
 }
-
-const theme = createMuiTheme({
-    palette: {
-        primary: { 500: '#444444' },
-        error: { 500: Colors.primary }
-    }
-})
-
 
 export class FormInputView extends Component {
 
@@ -188,8 +180,8 @@ export class FormInputView extends Component {
 
         if (this.state.inputType == INPUT_TYPE.dropdown) {
             return <ThemeProvider theme={theme}>
-                <FormControl style={formStyles.input}>
-                    <InputLabel>{label}</InputLabel>
+                <FormControl style={formStyles.input} color='secondary'>
+                    <InputLabel >{label}</InputLabel>
                     <Select
                         name={name}
                         value={value}
@@ -219,6 +211,7 @@ export class FormInputView extends Component {
                     type={keyboardType}
                     onChange={this.handleValueChange}
                     onBlur={this.isValidInput}
+                    color='secondary'
                 />
             </ThemeProvider>
         )
