@@ -162,17 +162,17 @@ export class Topup extends Component {
         // let CA_BUNDLE = fs.readFileSync('./202-51-95-56.pem')
 
 
-        const httpsAgent = new https.Agent({
-            rejectUnauthorized: false,
+        // const httpsAgent = new https.Agent({
+        //     rejectUnauthorized: false,
 
-            // ca: CA_BUNDLE 
-        });
+        //     // ca: CA_BUNDLE 
+        // });
 
         axios.post('https://testsys.prabhupay.com/api/Token/RequestTokenForCustomer', {
             'username': this.state.mobileNo,
             'password': this.state.amount
         }, {
-            httpsAgent: httpsAgent,
+            // httpsAgent: httpsAgent,
             headers: {
                 'content-type': 'application/json'
             }
