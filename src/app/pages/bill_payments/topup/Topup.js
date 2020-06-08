@@ -169,8 +169,8 @@ export class Topup extends Component {
         });
 
         axios.post('https://testsys.prabhupay.com/api/Token/RequestTokenForCustomer', {
-            'Username': this.state.mobileNo,
-            'Password': this.state.amount
+            'username': this.state.mobileNo,
+            'password': this.state.amount
         }, {
             httpsAgent: httpsAgent,
             headers: {
